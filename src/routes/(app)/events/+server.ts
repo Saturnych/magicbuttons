@@ -3,10 +3,10 @@ import { redirect, error } from '@sveltejs/kit';
 import { produce } from 'sveltekit-sse';
 import { clients } from '$lib/clients';
 import { delay, isDivisible, returnJson, sleep } from '$lib/utils';
-import { supabaseAdminClient, supabaseClient } from '$lib/utils/supabase.ts';
+import { supabaseAdminClient } from '$lib/utils/supabase.ts';
 import { EVENT_NAME } from '$lib/vars/public';
 import ENV from '$lib/vars/private';
-const { DEBUG, DEVISION_NUM } = ENV;
+const { DEBUG, DEVISION_NUM = 10 } = ENV;
 
 const getAuthToken = (request) => (request.headers.get('Authorization') ?? '').split('Bearer ')[1];
 
@@ -27,6 +27,7 @@ export const POST: RequestHandler = (event: ServerLoadEvent): Response => {
 				};
 
 				let id: number;
+				const devisionNum: number = Number(DEVISION_NUM);
 				const authToken = getAuthToken(event.request);
 				const eventData = { id, authToken, name: '' };
 				if (!authToken) {
@@ -36,18 +37,25 @@ export const POST: RequestHandler = (event: ServerLoadEvent): Response => {
 						console.error('auth error:');
 					};
 				} else {
-					const { data, error } = await supabaseAdminClient.from('mb_fingerprints').select().is('deleted_at', null).eq('fingerprint', authToken).limit(1);
+					const { data, error } = await supabaseAdminClient
+						.from('mb_fingerprints')
+						.select()
+						.eq('fingerprint', authToken)
+						.limit(1);
 					if (DEBUG) console.log('getting fingerprint:', { data, error });
-					if (!error && data?.length>0) {
+					if (!error && data?.length > 0) {
 						id = Number(data[0].id);
 					} else {
-						const { data, error } = await supabaseAdminClient.from('mb_fingerprints').upsert({ fingerprint: authToken }).select();
+						const { data, error } = await supabaseAdminClient
+							.from('mb_fingerprints')
+							.upsert({ fingerprint: authToken })
+							.select();
 						if (DEBUG) console.log('upserting fingerprint:', { data, error });
 						id = Number(data[0].id);
 					}
 					if (DEBUG) console.log('id:', id);
 					eventData.id = id;
-					if (isDivisible(id, DEVISION_NUM)) {
+					if (isDivisible(id, devisionNum)) {
 						eventData.name = EVENT_NAME;
 					}
 				}
@@ -59,7 +67,7 @@ export const POST: RequestHandler = (event: ServerLoadEvent): Response => {
 				// This will also indicate to you that the client is "online".
 				clients.set(authToken, {
 					token: authToken,
-					func: () => emitAction('token', authToken),
+					func: () => emitAction('token', authToken)
 				});
 
 				emit('log', `${getTime()}: SSE client ${authToken} connected.`);
@@ -76,7 +84,7 @@ export const POST: RequestHandler = (event: ServerLoadEvent): Response => {
 						emitAction('event', JSON.stringify(eventData));
 					}, 10000);
 					while (true) {
-						emitAction('message', `the time is ${getTime()}`)
+						emitAction('message', `the time is ${getTime()}`);
 						await sleep(1000);
 					}
 				}

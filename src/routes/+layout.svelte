@@ -48,7 +48,7 @@
 	out:fade={{ duration: 300 }}
 	class="{showLoader
 		? ''
-		: 'hidden '}bg-gray-500 min-h-screen min-w-screen flex w-fit fixed z-1000 top-0 right-0 grid gap-3"
+		: 'hidden '}bg-gray-500 fixed top-0 right-0 z-1000 flex grid min-h-screen w-fit min-w-screen gap-3"
 >
 	<div class="flex items-center justify-center">
 		<svg

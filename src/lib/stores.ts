@@ -1,6 +1,7 @@
 import { browser } from '$app/environment';
 import { parseJson } from '$lib/utils';
 import { useSharedStore, writableStore } from '$lib/utils/store';
+import { deleteCookie, setCookie } from '$lib/utils/cookie';
 import type { BrowserTheme } from '$lib/types';
 
 const useAlertId = () =>
@@ -32,7 +33,14 @@ const useUid = () =>
 
 export const uid = useUid();
 uid.subscribe((value) => {
-	if (browser && localStorage) localStorage.setItem('uid', !!value ? value : '');
+	if (browser) {
+		if (localStorage) localStorage.setItem('uid', !!value ? value : '');
+		if (!!value) {
+			setCookie('uid', value, 10000);
+		} else {
+			deleteCookie('uid');
+		}
+	}
 	return value;
 });
 
@@ -43,6 +51,10 @@ const useLogs = () =>
 
 export const logs = useLogs();
 logs.subscribe((value) => {
-	if (browser && localStorage) localStorage.setItem('logs', JSON.stringify(Array.isArray(value) && value?.length>0 ? value : []));
+	if (browser && localStorage)
+		localStorage.setItem(
+			'logs',
+			JSON.stringify(Array.isArray(value) && value?.length > 0 ? value : [])
+		);
 	return value;
 });

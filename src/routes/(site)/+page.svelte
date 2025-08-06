@@ -13,14 +13,15 @@
 	const repository = __REPO__;
 	const eventText = EVENT_NAME;
 
-	let { devisionNum, popEvent = '' } = page.data;
-	if (DEBUG) console.log('devisionNum:', devisionNum);
+	let { devisionNum, popEvent } = page.data;
 
 	let { alertMessage = $bindable(''), buttonLink = $bindable(''), fpId = $bindable('') } = $props();
 
 	let sseToken: string = $derived('');
 	let sseMessage: string = $derived('');
-	let sseEvent: object = $derived({ id: '?', authToken: uid.get(), name: popEvent });
+	let sseEvent: object = $derived(
+		popEvent ? popEvent : { id: '?', authToken: uid.get(), name: '' }
+	);
 	fpId = sseEvent.id;
 	if (sseEvent?.name === eventText) {
 		buttonLink = repository;
@@ -90,9 +91,7 @@
 		return value;
 	});
 
-	$effect(async () => {
-
-	});
+	$effect(async () => {});
 </script>
 
 <Header />
@@ -104,19 +103,20 @@
 </div>
 
 <div class="mt-auto">
-	<div class="flex flex-wrap items-center justify-left gap-4 py-4">
-		<h2 class="text-3xl">{fpId || '?'}</h2> <h2 class="text-xl"> / {devisionNum}</h2>
+	<div class="justify-left flex flex-wrap items-center gap-4 py-4">
+		<h2 class="text-3xl">{fpId || '?'}</h2>
+		<h2 class="text-xl">/ {devisionNum}</h2>
 	</div>
 </div>
 
 <div id="buttons">
-{#if isValidUrl(buttonLink)}
-	<button
-		title="PUSH ME!"
-		class="justify-center text-xl text-neutral-600 hover:text-neutral-500 focus:outline-none"
-		onclick={() => window.open(buttonLink, '_blank')}
-	>
-		<Icon icon="mdi:arrow-right" style="font-size: 90px;" />
-	</button>
-{/if}
+	{#if isValidUrl(buttonLink)}
+		<button
+			title="PUSH ME!"
+			class="justify-center text-xl text-neutral-600 hover:text-neutral-500 focus:outline-none"
+			onclick={() => window.open(buttonLink, '_blank')}
+		>
+			<Icon icon="mdi:arrow-right" style="font-size: 90px;" />
+		</button>
+	{/if}
 </div>

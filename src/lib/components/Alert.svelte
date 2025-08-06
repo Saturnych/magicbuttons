@@ -62,19 +62,19 @@
 		<div
 			in:fade={{ duration: 200 }}
 			out:fade={{ duration: 200 }}
-			class="fixed z-100 top-[8%] right-[40%] flex w-fit"
+			class="fixed top-[8%] right-[40%] z-100 flex w-fit"
 		>
-			<div class="container-fluid mx-auto px-4 mt-5">
+			<div class="container-fluid mx-auto mt-5 px-4">
 				{#if alert?.isError}
 					<div
-						class="px-4 py-4 mb-5 bg-gray-200 text-red-800 rounded ring-2 ring-red-500"
+						class="mb-5 rounded bg-gray-200 px-4 py-4 text-red-800 ring-2 ring-red-500"
 						role="alert"
 					>
 						{alert?.message}
 					</div>
 				{:else}
 					<div
-						class="px-4 py-4 mb-5 bg-gray-200 text-green-800 rounded ring-2 ring-green-500"
+						class="mb-5 rounded bg-gray-200 px-4 py-4 text-green-800 ring-2 ring-green-500"
 						role="alert"
 					>
 						{alert?.message}

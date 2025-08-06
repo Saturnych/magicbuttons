@@ -42,7 +42,10 @@ export const lockResource = (frm: Record<string, unknown>, uri: string) => {
 				try {
 					let { promise, resolve, reject } = Promise.withResolvers();
 
-					const result: object = await Promise.race([promise, timeout(TIMEOUT, { error: 'timeout', uid })]);
+					const result: object = await Promise.race([
+						promise,
+						timeout(TIMEOUT, { error: 'timeout', uid })
+					]);
 
 					if (DEBUG) console.log('lockResource() result:', result);
 				} catch (err) {
@@ -109,7 +112,8 @@ export const isNumeric = (n: string): boolean => !isNaN(parseFloat(n)) && isFini
 
 export const isDate = (d: unknown): boolean => d instanceof Date && !Number.isNaN(d.getTime());
 
-export const isDivisible = (dividend: number, divisor: number = 10): boolean => (isNumeric(dividend) && isNumeric(divisor) && dividend % divisor === 0);
+export const isDivisible = (dividend: number, divisor: number = 10): boolean =>
+	isNumeric(dividend) && isNumeric(divisor) && dividend % divisor === 0;
 
 export const isValidUrl = (str: string, checkHttp: boolean = false): boolean => {
 	try {
