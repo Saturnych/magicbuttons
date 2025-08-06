@@ -1,9 +1,9 @@
-import pkg from './package.json' with { type: 'json' };
+import { EVENT_NAME } from '$lib/vars/public';
 import ENV from '$lib/vars/private';
 const { SB_URL } = ENV;
 
 export const load = async ({ setHeaders }) => {
-	let buttonLink: string = pkg?.homepage;
+	let popEvent: string;// = EVENT_NAME;
 	try {
 
 	} catch (err) {
@@ -13,5 +13,5 @@ export const load = async ({ setHeaders }) => {
 		'Cross-Origin-Opener-Policy': 'same-origin',
 		'Cross-Origin-Embedder-Policy': 'require-corp'
 	});
-	return { buttonLink };
+	return { popEvent };
 };

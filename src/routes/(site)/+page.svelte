@@ -5,23 +5,24 @@
 	import { browser } from '$app/environment';
 	import { uid, logs } from '$lib/stores';
 	import { isValidUrl } from '$lib/utils';
-	import { DEBUG, EVENTS_URI } from '$lib/vars/public';
+	import { DEBUG, EVENTS_URI, EVENT_NAME } from '$lib/vars/public';
 
 	import Header from '$lib/components/Header.svelte';
 	import Alert from '$lib/components/Alert.svelte';
 
 	const repository = __REPO__;
-	const eventText = 'showButton';
+	const eventText = EVENT_NAME;
 
-	let { buttonLink = '' } = page.data;
-	if (DEBUG) console.log('buttonLink:', buttonLink);
+	let { popEvent = '' } = page.data;
+	if (DEBUG) console.log('popEvent:', popEvent);
 
-	let { alertMessage = $bindable() } = $props();
-
-	let sseMessage: string = $derived.by(() => (isValidUrl(buttonLink) ? eventText : ''));
+	let { alertMessage = $bindable(''), buttonLink = $bindable('') } = $props();
 
 	let sseToken: string = $derived('');
 	let sseEvent: string = $derived('');
+	let sseMessage: string = $derived(popEvent);
+	if (sseMessage === eventText) buttonLink = repository;
+	if (DEBUG) console.log('buttonLink:', buttonLink);
 
 	let sseLog: string = $derived.by(() => {
 		const arr = logs.get();

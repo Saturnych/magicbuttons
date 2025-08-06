@@ -3,6 +3,7 @@ import { redirect, error } from '@sveltejs/kit';
 import { produce } from 'sveltekit-sse';
 import { clients } from '$lib/clients';
 import { delay, returnJson, sleep } from '$lib/utils';
+import { EVENT_NAME } from '$lib/vars/public';
 import ENV from '$lib/vars/private';
 const { DEBUG } = ENV;
 
@@ -39,8 +40,8 @@ export const POST: RequestHandler = (event: ServerLoadEvent): Response => {
 				});
 				if (DEBUG) console.log('SSE clients:', clients);
 				delay(() => {
-					if (DEBUG) console.log('SSE message showButton:');
-					const { error } = emit('event', 'showButton');
+					if (DEBUG) console.log('SSE event:', EVENT_NAME);
+					const { error } = emit('event', EVENT_NAME);
 					if (error) {
 						const { message } = error;
 						emit('log', `${getTime()}: ${message}`);

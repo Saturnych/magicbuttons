@@ -12,3 +12,4 @@ export const APP_NAME: string = ENV.PUBLIC_APP_NAME || 'app';
 export const APP_DOMAIN: string = ENV.PUBLIC_APP_DOMAIN || null;
 export const APP_URL: string = ENV.PUBLIC_APP_URL || null;
 export const EVENTS_URI: string = ENV.PUBLIC_EVENTS_URI || null;
+export const EVENT_NAME: string = ENV.PUBLIC_EVENT_NAME || null;
