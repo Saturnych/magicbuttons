@@ -45,7 +45,7 @@
 	$effect(async () => {
 		if (EVENTS_URI) {
 			if (DEBUG) console.log('EVENTS_URI:', EVENTS_URI);
-			if (DEBUG) console.log('authToken:', authToken);
+			console.log('authToken:', authToken);
 			const connection = source(EVENTS_URI, {
 				options: {
 					headers: {
