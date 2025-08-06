@@ -1,1 +1,39 @@
 @import 'tailwindcss';
+
+@custom-variant dark (&:where(.dark, .dark *));
+@custom-variant light (&:where(.light, .light *));
+
+html {
+	color-scheme: none;
+	scroll-behavior: smooth;
+	overflow-y: overlay;
+	scrollbar-width: thin;
+	scrollbar-color: var(--neutral-600) transparent;
+}
+
+:root {
+	--neutral-600: #404040;
+}
+
+body {
+	@apply bg-neutral-900 text-neutral-300;
+}
+
+::selection {
+	@apply bg-orange-500 text-neutral-900;
+}
+
+::-webkit-scrollbar {
+	height: 6px;
+	width: 6px;
+	background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--neutral-600);
+	-webkit-border-radius: 1ex;
+}
+
+textarea {
+  resize: none;
+}
