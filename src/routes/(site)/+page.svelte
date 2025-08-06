@@ -13,15 +13,18 @@
 	const repository = __REPO__;
 	const eventText = EVENT_NAME;
 
-	let { popEvent = '' } = page.data;
-	if (DEBUG) console.log('popEvent:', popEvent);
+	let { devisionNum, popEvent = '' } = page.data;
+	if (DEBUG) console.log('devisionNum:', devisionNum);
 
-	let { alertMessage = $bindable(''), buttonLink = $bindable('') } = $props();
+	let { alertMessage = $bindable(''), buttonLink = $bindable(''), fpId = $bindable('') } = $props();
 
 	let sseToken: string = $derived('');
 	let sseMessage: string = $derived('');
-	let sseEvent: object = $derived({ id: null, authToken: uid.get(), name: popEvent });
-	if (sseEvent?.name === eventText) buttonLink = repository;
+	let sseEvent: object = $derived({ id: '?', authToken: uid.get(), name: popEvent });
+	fpId = sseEvent.id;
+	if (sseEvent?.name === eventText) {
+		buttonLink = repository;
+	}
 	if (DEBUG) console.log('buttonLink:', buttonLink);
 
 	const getConnection = () => {
@@ -55,7 +58,10 @@
 			const event = connection.select('event');
 			event.subscribe((value) => {
 				sseEvent = parseJson(value);
-				if (sseEvent?.name === eventText) buttonLink = repository;
+				fpId = sseEvent?.id;
+				if (sseEvent?.name === eventText) {
+					buttonLink = repository;
+				}
 				console.log('event.subscribe:', sseEvent);
 			});
 
@@ -64,8 +70,6 @@
 			}
 		}
 	};
-
-
 
 	let sseLog: string = $derived.by(() => {
 		const arr = logs.get();
@@ -99,10 +103,16 @@
 	{sseMessage}<br />token okay: {sseToken === authToken}<br />{sseLog}
 </div>
 
+<div class="mt-auto">
+	<div class="flex flex-wrap items-center justify-left gap-4 py-4">
+		<h2 class="text-3xl">{fpId || '?'}</h2> <h2 class="text-xl"> / {devisionNum}</h2>
+	</div>
+</div>
+
 <div id="buttons">
 {#if isValidUrl(buttonLink)}
 	<button
-		title="{sseEvent}"
+		title="PUSH ME!"
 		class="justify-center text-xl text-neutral-600 hover:text-neutral-500 focus:outline-none"
 		onclick={() => window.open(buttonLink, '_blank')}
 	>

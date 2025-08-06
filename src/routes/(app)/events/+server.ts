@@ -6,9 +6,7 @@ import { delay, isDivisible, returnJson, sleep } from '$lib/utils';
 import { supabaseAdminClient, supabaseClient } from '$lib/utils/supabase.ts';
 import { EVENT_NAME } from '$lib/vars/public';
 import ENV from '$lib/vars/private';
-const { DEBUG } = ENV;
-
-const DEVISION_NUM = 2;
+const { DEBUG, DEVISION_NUM } = ENV;
 
 const getAuthToken = (request) => (request.headers.get('Authorization') ?? '').split('Bearer ')[1];
 
@@ -30,6 +28,7 @@ export const POST: RequestHandler = (event: ServerLoadEvent): Response => {
 
 				let id: number;
 				const authToken = getAuthToken(event.request);
+				const eventData = { id, authToken, name: '' };
 				if (!authToken) {
 					const message: string = 'SSE client authToken not found.';
 					emit('log', `${getTime()}: ${message}`);
@@ -47,12 +46,14 @@ export const POST: RequestHandler = (event: ServerLoadEvent): Response => {
 						id = Number(data[0].id);
 					}
 					if (DEBUG) console.log('id:', id);
+					eventData.id = id;
 					if (isDivisible(id, DEVISION_NUM)) {
-						const data = { id, authToken, name: EVENT_NAME };
-						if (DEBUG) console.log('SSE event:', data);
-						emitAction('event', JSON.stringify(data));
+						eventData.name = EVENT_NAME;
 					}
 				}
+
+				if (DEBUG) console.log('SSE eventData:', eventData);
+				emitAction('event', JSON.stringify(eventData));
 
 				// Map the session id to an emitter.
 				// This will also indicate to you that the client is "online".
@@ -70,9 +71,9 @@ export const POST: RequestHandler = (event: ServerLoadEvent): Response => {
 
 				if (DEBUG) {
 					delay(() => {
-						const data = { id, authToken, name: EVENT_NAME };
-						if (DEBUG) console.log('SSE event:', data);
-						emitAction('event', JSON.stringify(data));
+						eventData.name = EVENT_NAME;
+						if (DEBUG) console.log('SSE eventData:', eventData);
+						emitAction('event', JSON.stringify(eventData));
 					}, 10000);
 					while (true) {
 						emitAction('message', `the time is ${getTime()}`)
