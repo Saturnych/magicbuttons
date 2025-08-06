@@ -4,7 +4,7 @@
 	import { page } from '$app/state';
 	import { browser } from '$app/environment';
 	import { uid, logs } from '$lib/stores';
-	import { isValidUrl } from '$lib/utils';
+	import { delay, isValidUrl } from '$lib/utils';
 	import { DEBUG, EVENTS_URI, EVENT_NAME } from '$lib/vars/public';
 
 	import Header from '$lib/components/Header.svelte';
@@ -13,38 +13,9 @@
 	const repository = __REPO__;
 	const eventText = EVENT_NAME;
 
-	let { popEvent = '' } = page.data;
-	if (DEBUG) console.log('popEvent:', popEvent);
-
-	let { alertMessage = $bindable(''), buttonLink = $bindable('') } = $props();
-
-	let sseToken: string = $derived('');
-	let sseEvent: string = $derived('');
-	let sseMessage: string = $derived(popEvent);
-	if (sseMessage === eventText) buttonLink = repository;
-	if (DEBUG) console.log('buttonLink:', buttonLink);
-
-	let sseLog: string = $derived.by(() => {
-		const arr = logs.get();
-		return arr?.length > 0 ? arr[arr.length - 1] : '';
-	});
-
-	let sseLogs: string[] = $derived(logs.get());
-	logs.subscribe((value) => {
-		sseLogs = value;
-		sseLog = value?.length > 0 ? value[value.length - 1] : '';
-		return value;
-	});
-
-	let authToken: string = $derived(uid.get());
-	uid.subscribe((value) => {
-		authToken = value;
-		return value;
-	});
-
-	$effect(async () => {
+	const getConnection = () => {
 		if (EVENTS_URI) {
-			if (DEBUG) console.log('EVENTS_URI:', EVENTS_URI);
+			console.log('EVENTS_URI:', EVENTS_URI);
 			console.log('authToken:', authToken);
 			const connection = source(EVENTS_URI, {
 				options: {
@@ -81,6 +52,40 @@
 				//const testConnectionTimer = setInterval(() => connection.close(), 10000);
 			}
 		}
+	};
+
+	let { popEvent = '' } = page.data;
+	if (DEBUG) console.log('popEvent:', popEvent);
+
+	let { alertMessage = $bindable(''), buttonLink = $bindable('') } = $props();
+
+	let sseToken: string = $derived('');
+	let sseEvent: string = $derived('');
+	let sseMessage: string = $derived(popEvent);
+	if (sseMessage === eventText) buttonLink = repository;
+	if (DEBUG) console.log('buttonLink:', buttonLink);
+
+	let sseLog: string = $derived.by(() => {
+		const arr = logs.get();
+		return arr?.length > 0 ? arr[arr.length - 1] : '';
+	});
+
+	let sseLogs: string[] = $derived(logs.get());
+	logs.subscribe((value) => {
+		sseLogs = value;
+		sseLog = value?.length > 0 ? value[value.length - 1] : '';
+		return value;
+	});
+
+	let authToken: string = $derived(uid.get());
+	uid.subscribe((value) => {
+		authToken = value;
+		getConnection()
+		return value;
+	});
+
+	$effect(async () => {
+
 	});
 </script>
 

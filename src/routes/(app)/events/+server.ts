@@ -23,7 +23,7 @@ export const POST: RequestHandler = (event: ServerLoadEvent): Response => {
 					if (error) {
 						const { message } = error;
 						emit('log', `${getTime()}: ${message}`);
-						console.error(`${name} error:`, message);
+						//console.error(`${name} error:`, message);
 						return;
 					}
 				};
@@ -63,6 +63,9 @@ export const POST: RequestHandler = (event: ServerLoadEvent): Response => {
 				console.log(`SSE client ${authToken} connected.`);
 				console.log('SSE clients:', clients);
 
+				const client = clients.get(authToken);
+				if (client?.token) client.func();
+
 				if (DEBUG) {
 					delay(() => {
 						if (DEBUG) console.log('SSE event:', EVENT_NAME);
@@ -70,8 +73,6 @@ export const POST: RequestHandler = (event: ServerLoadEvent): Response => {
 					}, 10000);
 					while (true) {
 						emitAction('message', `the time is ${getTime()}`)
-						const client = clients.get(authToken);
-						if (client?.token) client.func();
 						await sleep(1000);
 					}
 				}

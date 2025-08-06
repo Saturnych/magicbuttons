@@ -25,7 +25,7 @@
 					const { components, hash } = parseFingerprint2(comps);
 					const fp2Hash = hashWithTextEncoder(hash);
 					//if (DEBUG) console.log('components:', components);
-					//if (DEBUG) console.log('fp2Hash:', fp2Hash);
+					if (DEBUG) console.log('fp2Hash:', fp2Hash);
 					uid.update(fp2Hash);
 				});
 		};
