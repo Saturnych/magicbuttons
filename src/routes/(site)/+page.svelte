@@ -4,7 +4,7 @@
 	import { page } from '$app/state';
 	import { browser } from '$app/environment';
 	import { uid, logs } from '$lib/stores';
-	import { delay, isValidUrl } from '$lib/utils';
+	import { delay, isValidUrl, parseJson } from '$lib/utils';
 	import { DEBUG, EVENTS_URI, EVENT_NAME } from '$lib/vars/public';
 
 	import Header from '$lib/components/Header.svelte';
@@ -13,9 +13,19 @@
 	const repository = __REPO__;
 	const eventText = EVENT_NAME;
 
+	let { popEvent = '' } = page.data;
+	if (DEBUG) console.log('popEvent:', popEvent);
+
+	let { alertMessage = $bindable(''), buttonLink = $bindable('') } = $props();
+
+	let sseToken: string = $derived('');
+	let sseMessage: string = $derived('');
+	let sseEvent: object = $derived({ id: null, authToken: uid.get(), name: popEvent });
+	if (sseEvent?.name === eventText) buttonLink = repository;
+	if (DEBUG) console.log('buttonLink:', buttonLink);
+
 	const getConnection = () => {
 		if (EVENTS_URI) {
-			console.log('EVENTS_URI:', EVENTS_URI);
 			console.log('authToken:', authToken);
 			const connection = source(EVENTS_URI, {
 				options: {
@@ -44,8 +54,9 @@
 			});
 			const event = connection.select('event');
 			event.subscribe((value) => {
-				sseEvent = value;
-				if (sseEvent === eventText) buttonLink = repository;
+				sseEvent = parseJson(value);
+				if (sseEvent?.name === eventText) buttonLink = repository;
+				console.log('event.subscribe:', sseEvent);
 			});
 
 			if (DEBUG) {
@@ -54,16 +65,7 @@
 		}
 	};
 
-	let { popEvent = '' } = page.data;
-	if (DEBUG) console.log('popEvent:', popEvent);
 
-	let { alertMessage = $bindable(''), buttonLink = $bindable('') } = $props();
-
-	let sseToken: string = $derived('');
-	let sseEvent: string = $derived('');
-	let sseMessage: string = $derived(popEvent);
-	if (sseMessage === eventText) buttonLink = repository;
-	if (DEBUG) console.log('buttonLink:', buttonLink);
 
 	let sseLog: string = $derived.by(() => {
 		const arr = logs.get();
@@ -80,7 +82,7 @@
 	let authToken: string = $derived(uid.get());
 	uid.subscribe((value) => {
 		authToken = value;
-		getConnection()
+		getConnection();
 		return value;
 	});
 

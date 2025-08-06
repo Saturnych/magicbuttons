@@ -28,6 +28,7 @@ export const POST: RequestHandler = (event: ServerLoadEvent): Response => {
 					}
 				};
 
+				let id: number;
 				const authToken = getAuthToken(event.request);
 				if (!authToken) {
 					const message: string = 'SSE client authToken not found.';
@@ -36,7 +37,6 @@ export const POST: RequestHandler = (event: ServerLoadEvent): Response => {
 						console.error('auth error:');
 					};
 				} else {
-					let id: number;
 					const { data, error } = await supabaseAdminClient.from('mb_fingerprints').select().is('deleted_at', null).eq('fingerprint', authToken).limit(1);
 					if (DEBUG) console.log('getting fingerprint:', { data, error });
 					if (!error && data?.length>0) {
@@ -48,7 +48,9 @@ export const POST: RequestHandler = (event: ServerLoadEvent): Response => {
 					}
 					if (DEBUG) console.log('id:', id);
 					if (isDivisible(id, DEVISION_NUM)) {
-						emitAction('event', EVENT_NAME);
+						const data = { id, authToken, name: EVENT_NAME };
+						if (DEBUG) console.log('SSE event:', data);
+						emitAction('event', JSON.stringify(data));
 					}
 				}
 
@@ -68,8 +70,9 @@ export const POST: RequestHandler = (event: ServerLoadEvent): Response => {
 
 				if (DEBUG) {
 					delay(() => {
-						if (DEBUG) console.log('SSE event:', EVENT_NAME);
-						emitAction('event', EVENT_NAME);
+						const data = { id, authToken, name: EVENT_NAME };
+						if (DEBUG) console.log('SSE event:', data);
+						emitAction('event', JSON.stringify(data));
 					}, 10000);
 					while (true) {
 						emitAction('message', `the time is ${getTime()}`)
