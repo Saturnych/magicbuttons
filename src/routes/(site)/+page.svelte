@@ -100,7 +100,7 @@
 <Alert bind:alertMessage />
 
 <div id="messages">
-	{sseMessage}<br />token okay: {sseToken === authToken}<br />{sseLog}
+	{sseMessage}<br />token okay: {sseToken === authToken}
 </div>
 
 <div class="mt-auto">
