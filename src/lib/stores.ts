@@ -44,6 +44,17 @@ uid.subscribe((value) => {
 	return value;
 });
 
+const useFp2 = () =>
+	useSharedStore<object, string>('fp2', writableStore<string>, () =>
+		browser && localStorage ? localStorage.getItem('fp2') || '' : ''
+	);
+
+export const fp2 = useFp2();
+fp2.subscribe((value) => {
+	if (browser && localStorage) localStorage.setItem('fp2', !!value ? value : '');
+	return value;
+});
+
 const useLogs = () =>
 	useSharedStore<object, string[]>('logs', writableStore<string[]>, () =>
 		browser && localStorage ? parseJson(localStorage.getItem('logs') || '[]') : []

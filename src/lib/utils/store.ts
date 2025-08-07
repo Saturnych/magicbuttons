@@ -39,6 +39,7 @@ export const writableStore = <V>(defaultValue: V) => {
 		clear: () => set(null),
 		get: () => get(store),
 		getDefault: () => defaultValue,
-		setDefault: () => set(defaultValue)
+		setDefault: () => set(defaultValue),
+		notEmpty: () => !!get(store)
 	};
 };

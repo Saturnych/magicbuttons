@@ -82,7 +82,7 @@ export const POST: RequestHandler = (event: ServerLoadEvent): Response => {
 						eventData.name = EVENT_NAME;
 						if (DEBUG) console.log('SSE eventData:', eventData);
 						emitAction('event', JSON.stringify(eventData));
-					}, 10000);
+					}, 30000);
 					while (true) {
 						emitAction('message', `the time is ${getTime()}`);
 						await sleep(1000);

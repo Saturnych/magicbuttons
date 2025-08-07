@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { fade } from 'svelte/transition';
-	import { alertId, browserTheme, uid } from '$lib/stores';
-	import { setStore } from '$lib/utils/context';
+	import { alertId, browserTheme, fp2, uid } from '$lib/stores';
+	import { getStore, setStore } from '$lib/utils/context';
 	import { delay, hashWithTextEncoder, parseFingerprint2 } from '$lib/utils';
 	import { DEBUG } from '$lib/vars/public';
 	import type { BrowserTheme } from '$lib/types';
@@ -18,6 +18,7 @@
 		setStore<string>('alertId', alertId.get());
 		setStore<string>('browserTheme', browserTheme.get());
 		setStore<string>('uid', uid.get());
+		setStore<string>('fp2', fp2.get());
 
 		const getFingerprint2 = () => {
 			if (window.Fingerprint2 && 'get' in window.Fingerprint2)
@@ -26,7 +27,8 @@
 					const fp2Hash = hashWithTextEncoder(hash);
 					//if (DEBUG) console.log('components:', components);
 					if (DEBUG) console.log('fp2Hash:', fp2Hash);
-					uid.update(fp2Hash);
+					fp2.set(fp2Hash);
+					if (!uid.notEmpty()) uid.update(fp2Hash);
 				});
 		};
 
