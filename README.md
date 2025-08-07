@@ -1,6 +1,6 @@
 # magicbuttons
 
-MagicButtons App - Show a button to only 10% of users
+### MagicButtons App - Show a button to only 10% of users
 
 ## Key Features
 
