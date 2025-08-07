@@ -66,6 +66,7 @@
 	"keywords": [
 		"sveltekit",
 		"supabase",
+		"sse",
 		"fingerprint",
 		"typescript"
 	]
