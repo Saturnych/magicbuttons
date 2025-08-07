@@ -17,23 +17,8 @@
 			isError: true,
 			isShown: false
 		},
-		getLinkError: {
-			message: 'Input the text!',
-			isError: true,
-			isShown: false
-		},
-		linkCopied: {
-			message: 'Link copied',
-			isError: false,
-			isShown: false
-		},
-		linkCreated: {
-			message: 'Link created',
-			isError: false,
-			isShown: false
-		},
-		textCopied: {
-			message: 'Text copied',
+		success: {
+			message: 'Push the arrow button!',
 			isError: false,
 			isShown: false
 		}
@@ -43,7 +28,7 @@
 		alert = alerts[blockId];
 		if (!!message) alert.message = message;
 		alert.isShown = true;
-		await sleep(3000);
+		await sleep(4000);
 		alerts[blockId].isShown = false;
 		alert = {};
 		alertMessage = '';

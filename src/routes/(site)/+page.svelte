@@ -3,7 +3,7 @@
 	import { source } from 'sveltekit-sse';
 	import { page } from '$app/state';
 	import { browser } from '$app/environment';
-	import { uid, logs } from '$lib/stores';
+	import { alertId, logs, uid } from '$lib/stores';
 	import { delay, isValidUrl, parseJson } from '$lib/utils';
 	import { DEBUG, EVENTS_URI, EVENT_NAME } from '$lib/vars/public';
 
@@ -25,6 +25,7 @@
 	fpId = sseEvent.id;
 	if (sseEvent?.name === eventText) {
 		buttonLink = repository;
+		alertId.update('success');
 	}
 	if (DEBUG) console.log('buttonLink:', buttonLink);
 
@@ -62,6 +63,7 @@
 				fpId = sseEvent?.id;
 				if (sseEvent?.name === eventText) {
 					buttonLink = repository;
+					alertId.update('success');
 				}
 				console.log('event.subscribe:', sseEvent);
 			});
