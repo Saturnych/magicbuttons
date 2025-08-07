@@ -1,7 +1,7 @@
 {
 	"name": "magicbuttons",
 	"title": "MagicButtons App",
-	"description": "MagicButtons App",
+	"description": "MagicButtons App - Show a button to only 10% of users",
 	"private": true,
 	"version": "0.0.1",
 	"type": "module",
