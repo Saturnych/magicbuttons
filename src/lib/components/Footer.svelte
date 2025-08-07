@@ -41,7 +41,7 @@
 		window.addEventListener(
 			'storage',
 			(evt) => {
-				if (DEBUG && evt.key!=='logs')
+				if (DEBUG && evt.key !== 'logs')
 					console.log(
 						`storage event key: '${evt.key}'`,
 						'values:',
