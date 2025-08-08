@@ -26,6 +26,7 @@
 		} else {
 			browserTheme.update(theme);
 		}
+		document.documentElement.setAttribute('data-theme', isDarkTheme() ? 'dark' : 'light');
 		document.documentElement.classList.toggle('dark', isDarkTheme());
 		darkMode = document.documentElement.classList.contains('dark');
 	};

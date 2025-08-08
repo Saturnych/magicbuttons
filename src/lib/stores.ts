@@ -4,6 +4,8 @@ import { useSharedStore, writableStore } from '$lib/utils/store';
 import { deleteCookie, setCookie } from '$lib/utils/cookie';
 import type { BrowserTheme } from '$lib/types';
 
+const COOKIE_TTL_MINS = 10000;
+
 const useAlertId = () =>
 	useSharedStore<object, string>('alertId', writableStore<string>, () =>
 		browser && localStorage ? localStorage.getItem('alertId') || '' : ''
@@ -22,7 +24,14 @@ const useBrowserTheme = () =>
 
 export const browserTheme = useBrowserTheme();
 browserTheme.subscribe((value) => {
-	if (browser && localStorage) localStorage.setItem('browserTheme', !!value ? value : '');
+	if (browser) {
+		if (localStorage) localStorage.setItem('browserTheme', !!value ? value : '');
+		if (!!value) {
+			setCookie('browserTheme', value, COOKIE_TTL_MINS);
+		} else {
+			deleteCookie('browserTheme');
+		}
+	}
 	return value;
 });
 
@@ -36,7 +45,7 @@ uid.subscribe((value) => {
 	if (browser) {
 		if (localStorage) localStorage.setItem('uid', !!value ? value : '');
 		if (!!value) {
-			setCookie('uid', value, 10000);
+			setCookie('uid', value, COOKIE_TTL_MINS);
 		} else {
 			deleteCookie('uid');
 		}

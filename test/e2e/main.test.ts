@@ -114,7 +114,7 @@ test('e2e page check', async () => {
 	const h3text = await h3.textContent();
 	console.log('h3text:', h3text);
 	await expect(isNumeric(h3text)).toBeTruthy();
-	const divisible: boolean = isDivisible(Number(h2text),Number(h3text));
+	const divisible: boolean = isDivisible(Number(h2text), Number(h3text));
 	console.log('divisible:', divisible);
 	const button = page.locator('button');
 	if (divisible) {

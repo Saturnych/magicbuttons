@@ -106,7 +106,9 @@
 
 <div class="mt-auto">
 	<div class="justify-left flex flex-wrap items-center gap-4 py-4">
-		<h2 class="text-3xl">{fpId || '?'}</h2>&nbsp;/&nbsp;<h3 class="text-xl">{devisionNum}</h3>
+		<h2 class="text-3xl">{fpId || '?'}</h2>
+		&nbsp;/&nbsp;
+		<h3 class="text-xl">{devisionNum}</h3>
 	</div>
 </div>
 
