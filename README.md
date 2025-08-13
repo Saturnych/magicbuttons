@@ -7,7 +7,7 @@
 - ✅ **Fingerprint** – Using fingerprint to track user's ID and calculate percentage
 - ✅ **Modern Stack** – Powered by SvelteKit and Tailwind CSS, deployed on Vercel, Supabase as DB
 - ✅ **End-to-End Testing** – Comprehensive browser testing using Playwright
-- ✅ **CI/CD Pipeline** – GitHub workflows for testing and email notification if tests succeed
+- ✅ **CI/CD Pipeline** – Shared GitHub workflows for testing and email notification if tests succeed
 
 ### Technical Implementation
 
@@ -28,4 +28,4 @@
   - Button state validation
   - Cross-browser compatibility
 
-[**Live Demo**](https://magicbuttons.vercel.app) | [**GitHub Repository**](https://github.com/Saturnych/magicbuttons)
+[**Live Demo**](https://magicbuttons.vercel.app) | [**GitHub Repository**](https://github.com/Saturnych/magicbuttons) | [**Shared Workflows Repository**](https://github.com/Saturnych/actions-workflows)
