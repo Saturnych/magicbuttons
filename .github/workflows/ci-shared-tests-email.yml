@@ -34,5 +34,4 @@ jobs:
     with:
       name: 'magicbuttons tests'
       status: ${{ needs.playwright.outputs.status }}
-      chat_id: ${{ secrets.TELEGRAM_BOT_GROUP }}
     secrets: inherit
