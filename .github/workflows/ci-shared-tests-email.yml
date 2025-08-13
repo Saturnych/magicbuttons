@@ -4,6 +4,8 @@ name: Development test workflow
 on:
   push:
     branches: [develop]
+    
+  workflow_dispatch:
 
 permissions:
   contents: read
