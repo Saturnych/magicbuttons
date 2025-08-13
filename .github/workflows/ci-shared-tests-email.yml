@@ -24,6 +24,15 @@ jobs:
     needs: playwright
     uses: 'Saturnych/actions-workflows/.github/workflows/email.yml@develop'
     with:
-      name: 'Tests'
+      name: 'magicbuttons tests'
       status: ${{ needs.playwright.outputs.status }}
+    secrets: inherit
+
+  tgbot:
+    needs: playwright
+    uses: 'Saturnych/actions-workflows/.github/workflows/tgbotmessage.yml@develop'
+    with:
+      name: 'magicbuttons tests'
+      status: ${{ needs.playwright.outputs.status }}
+      chat_id: ${{ secrets.TELEGRAM_BOT_GROUP }}
     secrets: inherit
