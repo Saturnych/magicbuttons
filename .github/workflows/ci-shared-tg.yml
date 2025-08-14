@@ -1,0 +1,32 @@
+name: Development notify workflow
+
+# Controls when the workflow will run
+on:
+  push:
+    branches: [notify]
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: 'notify'
+  cancel-in-progress: false
+
+jobs:
+  email:
+    uses: 'Saturnych/actions-workflows/.github/workflows/email.yml@develop'
+    with:
+      name: 'magicbuttons notify'
+      status: 'success'
+    secrets: inherit
+
+  tgbot:
+    uses: 'Saturnych/actions-workflows/.github/workflows/tgbotmessage.yml@develop'
+    with:
+      name: 'magicbuttons notify'
+      status: 'success'
+    secrets: inherit
